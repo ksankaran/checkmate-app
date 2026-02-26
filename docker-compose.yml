@@ -24,8 +24,6 @@ services:
     build: ./checkmate-ui
     ports:
       - "3001:3000"
-    environment:
-      - API_URL=http://backend:8000
     depends_on:
       - backend
 
