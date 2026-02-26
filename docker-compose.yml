@@ -1,6 +1,7 @@
 services:
   playwright-http:
     build: ./playwright-http
+    env_file: .env
     ports:
       - "8932:8932"
     healthcheck:
@@ -22,6 +23,7 @@ services:
 
   frontend:
     build: ./checkmate-ui
+    env_file: .env
     ports:
       - "3001:3000"
     depends_on:
