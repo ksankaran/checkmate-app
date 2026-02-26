@@ -1,0 +1,46 @@
+services:
+  playwright-http:
+    build: ./playwright-http
+    ports:
+      - "8932:8932"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8932/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  backend:
+    build: ./checkmate
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      - PLAYWRIGHT_URL=http://playwright-http:8932
+    depends_on:
+      playwright-http:
+        condition: service_healthy
+
+  frontend:
+    build: ./checkmate-ui
+    ports:
+      - "3001:3000"
+    environment:
+      - API_URL=http://backend:8000
+    depends_on:
+      - backend
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: checkmate
+      POSTGRES_PASSWORD: checkmate
+      POSTGRES_DB: checkmate
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    profiles:
+      - postgres
+
+volumes:
+  pgdata:

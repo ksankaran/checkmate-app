@@ -1,0 +1,13 @@
+# Cloned sub-repos
+checkmate/
+checkmate-ui/
+playwright-http/
+
+# Environment
+.env
+
+# Docker
+pgdata/
+
+# OS
+.DS_Store
